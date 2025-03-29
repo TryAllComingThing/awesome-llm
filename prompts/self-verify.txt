@@ -1,0 +1,37 @@
+    verfiy_type_template_short = """Determine whether the answer 'A' is expected answer type for question 'Q'. For classification tasks (like sentiment analysis, selecting choice, entailment inference and so on), you need to check whether the answer is the exact same as one of the expected Enums (like “True”, ”False”, “Positive“, ”Negative”, “A”, “B”, “C”, “D”, “Contradiction”, “Neutral” or “Entailment” etc.) as mentioned in the question ‘Q’. For free-form generation tasks (like title generation, question generation, data-to-text generation and so on), you need to check whether the answer is an expected generated title, question, data-to-text description or a summarization, etc., as the Question ‘Q’ required. You also need to compare with the ‘Golden A’ to determine whether the answer type aligns with the answer type of the ‘Golden A’. If the answer 'A' has the same type as the golden answer, give "Expected answer type", otherwise give "Unexpected answer type". Please note that you only need to determine whether it matches the required answer type, and do not need to verify whether the answer is correct.
+    """
+    prompt_correctness_template_short = """Determine whether the answer 'A' is 'Correct' or 'Incorrect' for question 'Q'. For classification tasks (the answer is limited to a finite set such as “True”, ”False”, “Positive”, ”Negative”, “A”, “B”, “C”, “D”, “Contradiction”, “Neutral”, “Entailment”), you need to check whether the answer is exactly match (equals) the golden answer ‘Golden A’. For free-form generation tasks (the answer is a free-form generation and not unique such as title, question, data-to-text description generation or a summarization), you need to check whether the answer describe the same thing as the golden answer, or the answer is fluent, plausible for the question ‘Q’. If the answer 'A' is correct, give "Correct", otherwise give "Incorrect" as the result.
+    """
+
+    few_shot_verify_type = """
+Q: We would like you to assess the QUALITY of each of the following argument (discussing Gay Marriage) and determine if the argument is Valid or Invalid. A valid argument is clearly interpretable and either expresses an argument, or a premise or a conclusion that can be used in an argument for the topic of gay marriage. An invalid argument is a phrase that cannot be interpreted as an argument or not on the topic of gay marriage.\nBasically, Foundit's list of \"suspect posters\" seems to amounts to anyone who actually debates with him and disagrees with him any more than an nominal amount.
+Golden A: Invalid
+A: Sure, I can help you assess the quality of arguments related to gay marriage. Please provide me with the arguments you would like me to evaluate.
+Result: Unexpected answer type. 
+Explanation: The answer type is not the same as the desired answer type, which needs to be Valid or Invalid as the question 'Q' asked. It is not same with the answer type of Golden A.
+
+Q: Your objective in this task is to generate a topic word by incorporating at least one word from the given fact. The topic word should also include a new word from a related concept. Aim to select a topic word with two or more words for greater effectiveness.\nFact: a solar panel converts sunlight into electricity.
+Golden A: sunlight sun
+A: Solar panel electricity
+Result: Expected answer type
+Explanation: The answer A describe a topic word as the question 'Q' asked, and it is the same answer type with the Golden A.
+    """
+    few_shot_answer_correctness = """
+Q: In this task, you will work with a piece of text that contains a pronoun and two possible names. Your objective is to identify the referent of the pronoun and classify it as A, B, or Neither. The location of the pronoun in the text will be indicated by two underscores.
+Golden A: B
+A: B
+Result: Correct
+Explanation: The answer is the exactly same as the Golden answer A, so it is correct.
+
+Q: Your objective in this task is to generate a topic word by incorporating at least one word from the given fact. The topic word should also include a new word from a related concept. Aim to select a topic word with two or more words for greater effectiveness.\nFact: a solar panel converts sunlight into electricity.
+Golden A: sunlight sun
+A: Solar panel electricity
+Result: Correct
+Explanation: The answer A describe a reasonable topic word as the question 'Q' asked, and it is similar with the Golden A. So it is correct.
+
+Q: Go through the provided text and determine the correct pronoun for the specified name. The chosen pronoun should replace the symbol(_). The target name is enclosed within ** **. Select a pronoun amongst 'her', 'him', 'he', 'she', 'his' that correctly matches the casing as per its location in the text. \nAnother brother, Dr. Aswin W. Sastrowardoyo, is a physician who was formerly a guitarist and vocalist with the music group Chaseiro from 1979 to 1983, and a younger sister, Lisa Damayanti Sastrowardoyo (b. 1962). The actress Dian Sastrowardoyo is a niece of Ms. **Joesoef**. _ is married to Mr. Iwan V. Joesoef, a businessman, and has two sons Marwan Arie Joesoef (born 26/5/1976), Nurfahd S. Joesoef (born 4/3/1979) and one daughter Tiara R. Joesoef (born 5/7/1999)
+Golden A: she
+A: he
+Result: Incorrect
+Explanation: The answer A must be the same as the Golden answer A as the question 'Q' described, but it is not. So the result is Incorrect. 
+    """
